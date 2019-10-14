@@ -9,3 +9,4 @@ dependencies:
   - xplot=0.14.0
   - bqplot=0.11.5
   - notebook
+  - rise
