@@ -4,6 +4,7 @@
 #include <array>
 #include <cmath>
 #include <chrono>
+#include <climits>
 
 using std::array;
 using namespace std::chrono_literals;
@@ -34,10 +35,6 @@ namespace raut {
             return seed = tmp % m;
         }
 
-        public:
-
-        Rand(unsigned s = 42u) { seed = s; loto = init(); }
-
         //Potrebna funkcija zbog static niza...
         //Potrebno koriscenje array-a zbog static niza i vracanja vrednosti funkcije
         array<unsigned, 32> init() {
@@ -49,8 +46,12 @@ namespace raut {
             return res;
         }
 
+    public:
+        //Konstruktor
+        Rand(unsigned s = 42u) { seed = s; loto = init(); }
+
         //Bays and Durham shuffling (loto sistem)
-        auto uniform() {
+        auto rand() {
             minStdRand();
             auto i = seed / (1 + (m-1) / 32); //broj od 0 do 31
             double y = loto[i];
@@ -59,16 +60,21 @@ namespace raut {
         }
 
         //Box Muller metod za generisanje broja po gausovoj raspodeli
-        auto normal() {
+        auto randn() {
             double x, y, m, z;
             do {
-                x = 2. * uniform() - 1.;
-                y = 2. * uniform() - 1.;
+                x = 2. * rand() - 1.;
+                y = 2. * rand() - 1.;
                 m = x * x + y * y;
             } while(m >= 1. || m == 0);
             z = sqrt((-2. * log(m)) / m);
 
             return x * z;
+        }
+
+        //Slucajan ceo broj od 0 do 4294967295
+        unsigned randi(unsigned M = UINT_MAX-1) {
+            return rand() * (M+1);    
         }
 
         auto srand(unsigned u) {
