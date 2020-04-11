@@ -1,4 +1,4 @@
-name: raut1_cling
+name: raut1
 channels:
   - QuantStack
   - conda-forge
